@@ -1,0 +1,32 @@
+<?php
+/**
+ * Implements hook_enable().
+ */
+function ableorganizer_sample_content_enable() {
+  
+  // need to get the non-aliased version of the getting started node
+  $nid = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->condition('title', 'Getting Started with AbleOrganizer')
+    ->condition('status', 1)
+    ->range(0, 1)
+    ->execute()
+    ->fetchField();
+  
+  if (!empty($nid)) {
+    $menu_items = array(
+      array(
+        'link_path' => 'node/' . $nid,
+        'link_title' => 'About',
+        'menu_name' => 'main-menu',
+        'weight' => -100,
+      ),
+    );
+    foreach ($menu_items as $item) {
+      $add = menu_link_save($item);
+    }
+    
+    menu_cache_clear_all();
+  }
+  
+}

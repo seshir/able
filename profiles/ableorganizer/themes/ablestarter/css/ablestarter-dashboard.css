@@ -1,0 +1,184 @@
+/* dashboard */
+.dashboard-layout {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box;
+}
+.dashboard-layout-inside .panels-flexible-region:first-child {
+  margin: 0px 10px 0px 0px;
+  padding: 0px;
+}
+.dashboard-layout-inside .panels-flexible-region:last-child {
+  margin: 0px 0px 0px 10px;
+  padding: 0px;
+}
+
+/* activty stream */
+.pane-ao-dashboard-act-stream-panel-pane-1 .pane-title {
+  position: absolute;
+  top: 8px;
+  left: 24px;
+  z-index: 100;
+  border-bottom: none;
+  color: #0062a0;
+}
+.view-ao-dashboard-act-stream {
+  padding: 58px 24px 16px 24px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px; 
+  -moz-border-radius: 8px; 
+  -webkit-border-radius: 8px; 
+  margin-bottom: 32px;
+  background-color: #f9f9f9;
+}
+
+/* quick links */
+.quick-links {
+}
+.quick-links STRONG {
+  margin: 8px 0px 8px;
+  padding: 0px;
+  color: #2d4552;
+  display: block;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+.quick-links A.quick-link {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  text-decoration: none;
+}
+.quick-links A.quick-link:hover {
+  color: #5ccbf6;
+}
+
+/* summary tables */
+.summary-pane {
+  padding: 4px;
+  border: 1px solid #CCC;
+  border-radius: 8px; 
+  -moz-border-radius: 8px; 
+  -webkit-border-radius: 8px; 
+  background-color: #f1f1f1;
+}
+.summary-pane .pane-title {
+  border: none;
+  text-align: center;
+  font-size: 1.2em;
+  margin: 0px auto;
+  padding: 0px;
+  color: #0062a0;
+}
+.summary-pane TABLE {
+  margin: 0px;
+}
+.dashboard-layout .summary-table {
+  border-radius: 4px; 
+  -moz-border-radius: 4px; 
+  -webkit-border-radius: 4px; 
+}
+.dashboard-layout .summary-table THEAD TH {
+  background-color: #e1e1e1;
+  font-size: 0.7em;
+  color: #9b59a8;
+  background-color: #CCC;
+  background: url('../images/pale_blue_bg.png') top left repeat;
+  background: #ffffff; 
+  background: -moz-linear-gradient(top,  #ffffff 31%, #dfe4e6 100%); 
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(31%,#ffffff), color-stop(100%,#dfe4e6)); 
+  background: -webkit-linear-gradient(top,  #ffffff 31%,#dfe4e6 100%); 
+  background: -o-linear-gradient(top,  #ffffff 31%,#dfe4e6 100%);
+  background: -ms-linear-gradient(top,  #ffffff 31%,#dfe4e6 100%);
+  background: linear-gradient(to bottom,  #ffffff 31%,#dfe4e6 100%);
+}
+.dashboard-layout .summary-table THEAD TH:first-child {
+  border-radius: 4px 0px 0px 0px; 
+  -moz-border-radius:  4px 0px 0px 0px; 
+  -webkit-border-radius:  4px 0px 0px 0px; 
+}
+.dashboard-layout .summary-table THEAD TH:last-child {
+  border-radius: 0px 4px 0px 0px; 
+  -moz-border-radius:  0px 4px 0px 0px; 
+  -webkit-border-radius:  0px 4px 0px 0px; 
+}
+.dashboard-layout .summary-table TR TD {
+  font-size: 1.5em;
+  color: #444;
+}
+.dashboard-layout .summary-table TR TD:first-child {
+  border-radius: 0px 0px 0px 4px; 
+  -moz-border-radius:  0px 0px 0px 4px; 
+  -webkit-border-radius:  0px 0px 0px 4px; 
+}
+.dashboard-layout .summary-table TR TD:last-child {
+  border-radius: 0px 0px 4px 0px; 
+  -moz-border-radius:  0px 0px 4px 0px; 
+  -webkit-border-radius:  0px 0px 4px 0px; 
+}
+
+
+/* grids within content */
+.pane-content .container-12-fluid {
+  clear: both;
+}
+.pane-content .container-12-fluid .grid-6 {
+  width: 48%;
+}
+@media only screen and (max-width : 740px) {
+  .panels-flexible-column,
+  .panels-flexible-region {
+    width: 100%;
+  }
+}
+.container-12 .panel-flexible .grid-2:first-child,
+.container-12 .panel-flexible .grid-3:first-child,
+.container-12 .panel-flexible .grid-4:first-child,
+.container-12 .panel-flexible .grid-5:first-child,
+.container-12 .panel-flexible .grid-6:first-child,
+.container-12 .panel-flexible .grid-7:first-child,
+.container-12 .panel-flexible .grid-8:first-child,
+.container-12 .panel-flexible .grid-9:first-child,
+.container-12 .panel-flexible .grid-10:first-child,
+.container-12 .panel-flexible .grid-11:first-child,
+.container-12 .panel-flexible .grid-12:first-child,
+.pane-content .container-12-fluid .grid-2:first-child,
+.pane-content .container-12-fluid .grid-3:first-child,
+.pane-content .container-12-fluid .grid-4:first-child,
+.pane-content .container-12-fluid .grid-5:first-child,
+.pane-content .container-12-fluid .grid-6:first-child,
+.pane-content .container-12-fluid .grid-7:first-child,
+.pane-content .container-12-fluid .grid-8:first-child,
+.pane-content .container-12-fluid .grid-9:first-child,
+.pane-content .container-12-fluid .grid-10:first-child,
+.pane-content .container-12-fluid .grid-11:first-child,
+.pane-content .container-12-fluid .grid-12:first-child {
+  margin-left: 0px;
+}
+.container-12 .panel-flexible .grid-2:last-child,
+.container-12 .panel-flexible .grid-3:last-child,
+.container-12 .panel-flexible .grid-4:last-child,
+.container-12 .panel-flexible .grid-5:last-child,
+.container-12 .panel-flexible .grid-6:last-child,
+.container-12 .panel-flexible .grid-7:last-child,
+.container-12 .panel-flexible .grid-8:last-child,
+.container-12 .panel-flexible .grid-9:last-child,
+.container-12 .panel-flexible .grid-10:last-child,
+.container-12 .panel-flexible .grid-11:last-child,
+.container-12 .panel-flexible .grid-12:last-child,
+.pane-content .container-12-fluid .grid-2:last-child,
+.pane-content .container-12-fluid .grid-3:last-child,
+.pane-content .container-12-fluid .grid-4:last-child,
+.pane-content .container-12-fluid .grid-5:last-child,
+.pane-content .container-12-fluid .grid-6:last-child,
+.pane-content .container-12-fluid .grid-7:last-child,
+.pane-content .container-12-fluid .grid-8:last-child,
+.pane-content .container-12-fluid .grid-9:last-child,
+.pane-content .container-12-fluid .grid-10:last-child,
+.pane-content .container-12-fluid .grid-11:last-child,
+.pane-content .container-12-fluid .grid-12:last-child {
+  margin-left: 0px;
+  margin-right: 0px;
+}

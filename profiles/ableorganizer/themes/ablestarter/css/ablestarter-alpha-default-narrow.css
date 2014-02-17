@@ -1,0 +1,38 @@
+/* This file will hold styles that are loaded using the same media query as the narrow grid. */
+/* If you are using the default media queries provided by Omega, these styles will also
+ *  apply to the normal and widescreen layouts. You may override these styles in the normal 
+ *  and widescreen CSS files as appropriate. */
+
+.crm_core_reports .column_b,
+.crm_core_reports .column_a {
+  float: left;
+  width: 48%;
+}
+
+#zone-branding-wrapper .navigation #main-menu LI {
+  padding: 12px 15px 0px 12px;
+}
+
+#zone-branding-wrapper .navigation #main-menu LI a {
+  font-size: 15px;
+}
+
+#zone-branding-wrapper .navigation #main-menu {
+  display: block !important;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  margin: 0px;
+}
+#zone-branding-wrapper .navigation #main-menu LI {
+  display: inline-block;
+  height: 50px;
+  background-color: #3c7489;
+  border: 1px solid #c3d2da;
+  border-bottom: none;
+  padding: 12px 10px 0px 9px;
+  background-clip: padding-box;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}

@@ -1,0 +1,107 @@
+/**
+  * Theming for contact records 
+  */
+
+.activity,
+.contact {
+  border: 1px solid #CCC;
+  background-color: White;
+  margin-bottom: 24px;
+  padding: 12px;
+}
+.activity .content,
+.contact .content {
+	display: table;
+  border: 1px solid #CCC;
+  width: 100%;
+}
+.activity .content .field,
+.contact .content .field {
+	display: table-row;
+}
+.activity h2,
+.contact h2 {
+  color: #00b0f3;
+}
+.activity .content .field .field-label,
+.activity .content .field .field-items,
+.contact .content .field .field-label,
+.contact .content .field .field-items {
+	display: table-cell;
+  border-bottom: 1px solid #CCC;
+  padding: 4px 4px;
+}
+.activity .content .field:last-child .field-label,
+.activity .content .field:last-child .field-items,
+.contact .content .field:last-child .field-label,
+.contact .content .field:last-child .field-items {
+  border-bottom: none;
+}
+.activity .content .field .field-label,
+.contact .content .field .field-label {
+	padding-right: 20px;
+	color: #999;
+	text-transform: uppercase;
+	font-size: 0.9em;
+	font-weight: normal;
+	border-right: 1px solid #CCC; 
+  white-space: nowrap;
+}
+.pane-ao-user-picture {
+  text-align: center;
+  background-color: #f1f1f1;
+}
+.pane-ao-user-picture .user-picture {
+  padding: 2em 2em 1em 2em;
+}
+.contact-user-info {
+  padding: 0em 0em 1em;
+}
+.nouser {
+  font-style: italic;
+}
+
+/* user profile summary data */
+.user-profile-summary-data {
+  border: 1px solid #CCC;
+  display: table;
+  width: 100%;
+}
+.user-profile-summary-data .user-profile-summary-data-row {
+  display: table-row;
+}
+.user-profile-summary-data .user-profile-summary-data-item {
+  display: table-cell;
+}
+.user-profile-summary-data .user-profile-summary-data-item .udpi-label {
+  text-align: center;
+  padding: .5em 0em 0em;
+}
+.user-profile-summary-data .user-profile-summary-data-item .udpi-data-item {
+  text-align: center;
+  font-width: 700;
+  font-size: 2em;
+  padding: 0em 0em .5em;
+}
+
+/* latest activities */
+.view-ao-5-latest-contact-activities {
+  position: relative;
+}
+.view-ao-5-latest-contact-activities .view-header {
+  position: absolute;
+  top: -50px;
+  right: 0px;
+}
+.view-ao-5-latest-contact-activities .view-header A {
+  padding: .2em .5em;
+  background-color: #00b0f3;
+  color: White;
+  text-decoration: none;
+  border-radius: 5px;
+  -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px; 
+}
+.view-ao-5-latest-contact-activities .view-header A:hover {
+  background-color: #6fd6fe;
+}

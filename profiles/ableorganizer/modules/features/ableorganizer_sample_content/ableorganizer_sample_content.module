@@ -1,0 +1,17 @@
+<?php
+/**
+ * @file
+ * Code for the AbleOrganizer Sample Content feature.
+ */
+
+include_once 'ableorganizer_sample_content.features.inc';
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function ableorganizer_sample_content_preprocess_html() {
+  drupal_add_library('system', 'ui', TRUE);
+  drupal_add_library('system', 'effects', TRUE);
+  drupal_add_library('system', 'effects.fade', TRUE);
+  drupal_add_library('system', 'ui.dialog', TRUE);
+}

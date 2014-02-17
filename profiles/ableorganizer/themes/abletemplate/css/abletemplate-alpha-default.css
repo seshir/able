@@ -1,0 +1,4 @@
+/* This file will hold styles for all layouts using the alpha grid (i.e. not the mobile layout). */
+.ao-marq .ao-marq-item {
+  width: 98%;
+}

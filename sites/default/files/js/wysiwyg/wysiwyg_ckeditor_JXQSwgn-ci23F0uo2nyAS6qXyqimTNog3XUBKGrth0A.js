@@ -1,0 +1,1 @@
+window.CKEDITOR_BASEPATH = '/able/profiles/ableorganizer/libraries/ckeditor/';

@@ -1,0 +1,477 @@
+@CHARSET "UTF-8";
+
+/** Color Codex
+  *
+  * Blue    - information, links to full page views
+  * Orange  - action links
+  * Green   - actions, form submissions, do something
+  * Red     - stop, cancel, delete
+  * Yellow  - preview, reset, other admin actions
+  * Purple  - special importance
+  *
+  */
+
+/* buttons */
+button.btn, 
+input[type="reset"].btn, 
+input[type="submit"].btn, 
+input[type="button"].btn,
+.btn {
+	border: 1px solid #9AD;
+	padding: 4px 12px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+	color: #2a3c4a;
+	letter-spacing: 1px;
+  display: inline-block;
+  background: #dfe4e6;
+  background: -moz-linear-gradient(top,  #dfe4e6 31%, #c3d2da 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(31%,#dfe4e6), color-stop(100%,#c3d2da));
+  background: -webkit-linear-gradient(top,  #dfe4e6 31%,#c3d2da 100%);
+  background: -o-linear-gradient(top,  #dfe4e6 31%,#c3d2da 100%);
+  background: -ms-linear-gradient(top,  #dfe4e6 31%,#c3d2da 100%);
+  background: linear-gradient(to bottom,  #dfe4e6 31%,#c3d2da 100%);
+  box-shadow: inset 0px 6px 4px .5px rgba(255, 255, 255, .6);
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-right: 4px;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+button.btn:hover, 
+input[type="reset"].btn:hover, 
+input[type="submit"].btn:hover, 
+input[type="button"].btn:hover,
+.btn:hover {
+  box-shadow: none;
+  cursor: pointer;
+  background: #c3d2da;
+}
+button.btn:active, 
+input[type="reset"].btn:active, 
+input[type="submit"].btn:active, 
+input[type="button"].btn:active,
+.btn:active {
+  box-shadow: inset 0px 4px 4px .5px rgba(75, 105, 122, .6);
+}
+
+/* sizes */
+button.btn-large, 
+input[type="reset"].btn-large, 
+input[type="submit"].btn-large, 
+input[type="button"].btn-large,
+.btn-large {
+	font-size: 1.2em;
+}
+button.btn-small, 
+input[type="reset"].btn-small, 
+input[type="submit"].btn-small, 
+input[type="button"].btn-small,
+.btn-small {
+	font-size: 0.8em;
+}
+button.btn-mini, 
+input[type="reset"].btn-mini, 
+input[type="submit"].btn-mini, 
+input[type="button"].btn-mini,
+.btn-mini {
+	font-size: 0.8em;
+	padding: 2px 4px;
+}
+
+/* colors */
+.btn-dark, .btn-dark A, btn.btn-dark, button.btn-dark, input[type="reset"].btn-dark, input[type="submit"].btn-dark, input[type="button"].btn-dark,
+.btn-green, .btn-green A, btn.btn-green, button.btn-green, input[type="reset"].btn-green, input[type="submit"].btn-green, input[type="button"].btn-green,
+.btn-red, .btn-red A, btn.btn-red, button.btn-red, input[type="reset"].btn-red, input[type="submit"].btn-red, input[type="button"].btn-red,
+.btn-orange, .btn-orange A, btn.btn-orange, button.btn-orange, input[type="reset"].btn-orange, input[type="submit"].btn-orange, input[type="button"].btn-orange,
+.btn-blue, .btn-blue A, btn.btn-blue, button.btn-blue, input[type="reset"].btn-blue, input[type="submit"].btn-blue, input[type="button"].btn-blue,
+.btn-yellow, btn.btn-yellow, button.btn-yellow, input[type="reset"].btn-yellow, input[type="submit"].btn-yellow, input[type="button"].btn-yellow,
+.btn-purple, btn.btn-purple, button.btn-purple, input[type="reset"].btn-purple, input[type="submit"].btn-purple, input[type="button"].btn-purple {
+  color: White;
+  border: none;
+  font-weight: normal;
+  text-decoration: none;
+}
+.btn-green, input[type="reset"].btn-green, input[type="submit"].btn-green, input[type="button"].btn-green {
+  background: #a0d75b;
+  background: linear-gradient(to bottom,  #a0d75b 31%,#84b449 100%);
+  box-shadow: inset 0px 6px 4px .5px rgba(225, 255, 175, .6);
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-green:hover, input[type="reset"].btn-green:hover, input[type="submit"].btn-green:hover, input[type="button"].btn-green:hover {
+  background: #84b449;
+}
+.btn-green:active, input[type="reset"].btn-green:active, input[type="submit"].btn-green:active, input[type="button"].btn-green:active {
+  box-shadow: inset 0px 4px 4px .5px rgba(95, 135, 45, .6);
+}
+.btn-red, input[type="reset"].btn-red, input[type="submit"].btn-red, input[type="button"].btn-red {
+  background: #f4412e;
+  background: linear-gradient(to bottom,  #f4412e 31%,#cf3a29 100%);
+  box-shadow: inset 0px 6px 4px .5px rgba(240, 175, 150, .6);
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-red:hover, input[type="reset"].btn-red:hover, input[type="submit"].btn-red:hover, input[type="button"].btn-red:hover {
+  background: #cf3a2a;
+}
+.btn-red:active, input[type="reset"].btn-red:active, input[type="submit"].btn-red:active, input[type="button"].btn-red:active {
+  box-shadow: inset 0px 4px 4px .5px rgba(207, 58, 42, .6);
+}
+.btn-orange, input[type="reset"].btn-orange, input[type="submit"].btn-orange, input[type="button"].btn-orange {
+  background: #fbb450;
+  background: linear-gradient(to bottom,  #fbb450 31%,#f89406 100%);
+  box-shadow: inset 0px 6px 4px .5px rgba(251, 180, 80, .6);
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-orange:hover, input[type="reset"].btn-orange:hover, input[type="submit"].btn-orange:hover, input[type="button"].btn-orange:hover {
+  background: #f89406;
+}
+.btn-orange:active, input[type="reset"].btn-orange:active, input[type="submit"].btn-orange:active, input[type="button"].btn-orange:active {
+  box-shadow: inset 0px 4px 4px .5px rgba(200, 100, 2, .6);
+}
+.btn-purple, input[type="reset"].btn-purple, input[type="submit"].btn-purple, input[type="button"].btn-purple {
+  background: #59315f;
+  background: linear-gradient(to bottom,  #7A4583 31%,#59315f 100%);
+  box-shadow: inset 0px 6px 4px .5px rgba(170, 99, 184, .6);
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-purple:hover, input[type="reset"].btn-purple:hover, input[type="submit"].btn-purple:hover, input[type="button"].btn-purple:hover {
+  background: #59315f;
+}
+.btn-purple:active, input[type="reset"].btn-purple:active, input[type="submit"].btn-purple:active, input[type="button"].btn-purple:active {
+  box-shadow: inset 0px 4px 4px .5px rgba(65, 30, 75, .6);
+}
+.btn-yellow, input[type="reset"].btn-yellow, input[type="submit"].btn-yellow, input[type="button"].btn-yellow {
+  background: #eed484;
+  background: linear-gradient(to bottom,  #eed484 31%,#edc856 100%);
+  box-shadow: inset 0px 6px 4px .5px rgba(255, 230, 150, .6);
+  text-shadow: 1px 1px 3px #222;
+}
+.btn-yellow:hover, input[type="reset"].btn-yellow:hover, input[type="submit"].btn-yellow:hover, input[type="button"].btn-yellow:hover {
+  background: #edc856;
+}
+.btn-yellow:active, input[type="reset"].btn-yellow:active, input[type="submit"].btn-yellow:active, input[type="button"].btn-yellow:active {
+  box-shadow: inset 0px 4px 4px .5px rgba(180, 140, 80, .6);
+}
+.btn-blue, input[type="reset"].btn-blue, input[type="submit"].btn-blue, input[type="button"].btn-blue {
+  background: #00b0f3;
+  background: linear-gradient(to bottom,  #5ccbf6 31%,#248bd1 100%);
+  box-shadow: inset 0px 6px 4px .5px rgba(132, 213, 245, .6);
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-blue:hover, input[type="reset"].btn-blue:hover, input[type="submit"].btn-blue:hover, input[type="button"].btn-blue:hover {
+  background: #248bd1;
+}
+.btn-blue:active, input[type="reset"].btn-blue:active, input[type="submit"].btn-blue:active, input[type="button"].btn-blue:active {
+  box-shadow: inset 0px 4px 4px .5px rgba(15, 105, 180, .6);
+}
+
+/* expanded */
+.btn-expandable {
+	display: none;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+.btn-expandable UL.links  {
+  margin: 0px;
+  list-style-type: none;
+}
+.btn-expander:hover {
+  -moz-border-radius: 4px 4px 0px 0px;
+  -webkit-border-radius: 4px 4px 0px 0px;
+  border-radius: 4px 4px 0px 0px;
+  background-color: White;
+  color: Black;
+  text-shadow: none;
+  position: relative;
+  border: 1px solid #CCC;
+  box-shadow: 2px 3px 2px 2px rgba(70,90,140,.4);
+}
+.btn-expander:hover .btn-expandable {
+	display: block;
+	position: absolute;
+	background-color: White;
+	z-index: 1000;
+	left: 0px;
+	color: Black;
+	padding: 8px;
+	text-shadow: none;
+	margin-top: 4px;
+	border: 1px solid #CCC;
+	border-top: none;
+  -webkit-border-radius: 0px 4px 4px 4px;
+  border-radius: 0px 4px 4px 4px;
+  box-shadow: 2px 3px 2px 2px rgba(70,90,140,.4);
+}
+.btn-expander:hover.btn-expand-right .btn-expandable {
+	right: -1px;
+	left: auto;
+  -webkit-border-radius: 4px 0px 4px 4px;
+  border-radius: 4px 0px 4px 4px;
+}
+/* expanded colors */
+.btn-green.btn-expander:hover {
+  background: #84b449;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-green.btn-expander:hover.btn-expand-right .btn-expandable {
+  right: 0px;
+}
+.btn-green.btn-expander:hover .btn-expandable {
+  background: #00a03c;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-green.btn-expander:hover .btn-expandable A {
+  color: White;
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+}
+.btn-green.btn-expander:hover .btn-expandable A:hover {
+  background-color: #34d06e;
+  border-bottom: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
+}
+.btn-green.btn-expander:hover .btn-expandable A:last-child {
+  border-bottom: none;
+}
+.btn-red.btn-expander:hover {
+  background: #cf3a29;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-red.btn-expander:hover.btn-expand-right .btn-expandable {
+  right: 0px;
+}
+.btn-red.btn-expander:hover .btn-expandable {
+  background: #cf3a29;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-red.btn-expander:hover .btn-expandable A {
+  color: White;
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+}
+.btn-red.btn-expander:hover .btn-expandable A:hover {
+  background-color: #f4412e;
+  border-bottom: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
+}
+.btn-red.btn-expander:hover .btn-expandable A:last-child {
+  border-bottom: none;
+}
+.btn-orange.btn-expander:hover {
+  background: #f89406;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-orange.btn-expander:hover.btn-expand-right .btn-expandable {
+  right: 0px;
+}
+.btn-orange.btn-expander:hover .btn-expandable {
+  background: #f89406;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-orange.btn-expander:hover .btn-expandable A {
+  color: White;
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+}
+.btn-orange.btn-expander:hover .btn-expandable A:hover {
+  background-color: #fbb450;
+  border-bottom: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
+}
+.btn-orange.btn-expander:hover .btn-expandable A:last-child {
+  border-bottom: none;
+}
+.btn-purple.btn-expander:hover {
+  background: #59315f;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-purple.btn-expander:hover.btn-expand-right .btn-expandable {
+  right: 0px;
+}
+.btn-purple.btn-expander:hover .btn-expandable {
+  background: #59315f;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-purple.btn-expander:hover .btn-expandable A {
+  color: #edc856;
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+}
+.btn-purple.btn-expander:hover .btn-expandable A:hover {
+  background-color: #7A4583;
+  border-bottom: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
+}
+.btn-purple.btn-expander:hover .btn-expandable A:last-child {
+  border-bottom: none;
+}
+.btn-yellow.btn-expander:hover {
+  background: #edc856;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-yellow.btn-expander:hover.btn-expand-right .btn-expandable {
+  right: 0px;
+}
+.btn-yellow.btn-expander:hover .btn-expandable {
+  background: #edc856;
+  border: none;
+  color: White;
+}
+.btn-yellow.btn-expander:hover .btn-expandable A {
+  color: Black;
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  border-bottom: 1px solid #CCC;
+}
+.btn-yellow.btn-expander:hover .btn-expandable A:hover {
+  background-color: #eed484;
+  border-bottom: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
+}
+.btn-yellow.btn-expander:hover .btn-expandable A:last-child {
+  border-bottom: none;
+}
+.btn-blue.btn-expander:hover {
+  background: #248bd1;
+  border: none;
+  color: White;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-blue.btn-expander:hover.btn-expand-right .btn-expandable {
+  right: 0px;
+}
+.btn-blue.btn-expander:hover .btn-expandable {
+  background: #248bd1;
+  border: none;
+  color: White;
+}
+.btn-blue.btn-expander:hover .btn-expandable A {
+  color: White;
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  border-bottom: 1px solid #AAA;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-blue.btn-expander:hover .btn-expandable A:hover {
+	background-color: #5ccbf6;
+	border-bottom: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
+}
+.btn-blue.btn-expander:hover .btn-expandable A:last-child {
+  border-bottom: none;
+}
+
+/* simple - no gradients */
+.btn-simple, input[type="reset"].btn-simple, input[type="submit"].btn-simple, input[type="button"].btn-simple {
+  box-shadow: none;
+  text-shadow: none;
+}
+.btn-simple A {
+	color: White;
+	text-decoration: none;
+}
+.btn-green.btn-simple, input[type="reset"].btn-green.btn-simple, input[type="submit"].btn-green.btn-simple, input[type="button"].btn-green.btn-simple {
+  background: #00a03c;
+}
+.btn-green.btn-simple:hover, input[type="reset"].btn-green.btn-simple:hover, input[type="submit"].btn-green.btn-simple:hover, input[type="button"].btn-green.btn-simple:hover {
+  background: #00a03c;
+}
+.btn-red.btn-simple, input[type="reset"].btn-red.btn-simple, input[type="submit"].btn-red.btn-simple, input[type="button"].btn-red.btn-simple {
+  background: #f4412e;
+}
+.btn-red.btn-simple:hover, input[type="reset"].btn-red.btn-simple:hover, input[type="submit"].btn-red.btn-simple:hover, input[type="button"].btn-red.btn-simple:hover {
+  background: #cf3a29;
+}
+.btn-orange.btn-simple, input[type="reset"].btn-orange.btn-simple, input[type="submit"].btn-orange.btn-simple, input[type="button"].btn-orange.btn-simple {
+  background: #ffb600;
+}
+.btn-yellow.btn-simple, input[type="reset"].btn-yellow.btn-simple, input[type="submit"].btn-yellow.btn-simple, input[type="button"].btn-yellow.btn-simple {
+  background: #eed484;
+}
+.btn-blue.btn-simple, input[type="reset"].btn-blue.btn-simple, input[type="submit"].btn-blue.btn-simple, input[type="button"].btn-blue.btn-simple {
+  background: #00b0f3;
+}
+.btn-purple.btn-simple, input[type="reset"].btn-purple.btn-simple, input[type="submit"].btn-purple.btn-simple, input[type="button"].btn-purple.btn-simple {
+  background: #7A4583;
+}
+.btn-orange.btn-simple:hover, input[type="reset"].btn-orange.btn-simple:hover, input[type="submit"].btn-orange.btn-simple:hover, input[type="button"].btn-orange.btn-simple:hover {
+  background: #f89406;
+}
+.btn-blue.btn-simple:hover, input[type="reset"].btn-blue.btn-simple:hover, input[type="submit"].btn-blue.btn-simple:hover, input[type="button"].btn-blue.btn-simple:hover {
+  background: #248bd1;
+}
+.btn-yellow.btn-simple:hover, input[type="reset"].btn-yellow.btn-simple:hover, input[type="submit"].btn-yellow.btn-simple:hover, input[type="button"].btn-yellow.btn-simple:hover {
+  background: #edc856;
+}
+.btn-purple.btn-simple:hover, input[type="reset"].btn-purple.btn-simple:hover, input[type="submit"].btn-purple.btn-simple:hover, input[type="button"].btn-purple.btn-simple:hover {
+  background: #59315f;
+}
+
+/* dark - removes colors for default display */
+.btn-dark, input[type="reset"].btn-dark, input[type="submit"].btn-dark, input[type="button"].btn-dark,
+.btn-dark.btn-simple, input[type="reset"].btn-dark.btn-simple, input[type="submit"].btn-dark.btn-simple, input[type="button"].btn-dark.btn-simple {
+  background: #777;
+  box-shadow: none;
+  text-shadow: 1px 1px 3px #444;
+}
+.btn-dark:hover {
+  box-shadow: none;
+  text-shadow: 1px 1px 3px #444;
+}
+
+
+/* disabled */
+.btn-disabled  {
+  background: #c3d2da;
+  opacity: 0.5;
+}
+.btn-disabled .btn-expandable {
+	display: none;
+}
+
+/* specific buttons */
+.btn-vbo {
+	float: right;
+}
+
+.btn-vbo LI {
+  min-width: 175px;
+}

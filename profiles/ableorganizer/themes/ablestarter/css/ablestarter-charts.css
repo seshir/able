@@ -1,0 +1,48 @@
+
+/* tooltips */
+#flot-chart-tooltip {
+	font-size: 0.8em !important;
+	font-weight: 700;
+	color: White !important;
+	background-color: #333 !important;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 3px 3px 3px 0px rgba(100,100,100,.5);
+  box-shadow: 3px 3px 3px 0px rgba(100,100,100,.5); 
+}
+
+/* legends */
+.legend {
+  padding: 10px;
+}
+.legend DIV {
+	font-weight: 700;
+	opacity: 1 !important;
+	border: 1px solid #CCC;
+}
+.legend TABLE {
+	margin-bottom: 0px;
+	font-size: 2em !important;
+}
+.legend TABLE TD.legendColorBox {
+	border: none;
+	padding: 0px 0px 0px 5px;
+	margin: 0px;
+}
+.legend TABLE TD.legendColorBox DIV:not(.legend TABLE TD.legendColorBox DIV DIV) {
+	border: none !important;
+	padding: 0px 0px 0px 5px;
+	margin: 0px;
+  background-clip:content-box;
+}
+.legend TABLE TD.legendLabel {
+	border: none;
+  font-size: 0.4em;
+}
+
+/* labels */
+.pieLabel {
+  -webkit-box-shadow: 3px 3px 3px 0px rgba(100,100,100,.5);
+  box-shadow: 3px 3px 3px 0px rgba(100,100,100,.5); 
+  padding: 0px;
+}

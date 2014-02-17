@@ -1,0 +1,13 @@
+<?php
+/**
+ * @file
+ * Code for the Able Organizer feature.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function ao_enable() {
+  // Enable page manager handling of contact displaying.
+  variable_set('page_manager_crm_core_contact_view_disabled', FALSE);
+}

@@ -1,0 +1,208 @@
+/* some styles, specific to reports */
+
+
+/* reports page */
+.crm_core_reports {
+}
+.crm_core_report_icon {
+  height: 30px;
+  width: 30px;
+  float: left;
+  margin-right: 8px;
+	background-color: white !important;
+	border-radius: 24px;
+	padding: 0;  
+}
+.report-cmcd {
+  background: url('../images/ao-icons.png') -0px -60px no-repeat; 
+}
+.report-cmcd-donors {
+  background: url('../images/ao-icons.png') -60px -60px no-repeat; 
+}
+.report-cmcev {
+  background: url('../images/ao-icons.png') -30px -60px no-repeat; 
+}
+.report-cmcv {
+  background: url('../images/ao-icons.png') -120px -60px no-repeat; 
+}
+.report-cmcp {
+  background: url('../images/ao-icons.png') -90px -60px no-repeat; 
+}
+.crm_core_reports H3 {
+	background-color: #ffb600;
+	color: White;
+	font-weight: normal;
+	border-radius: 24px;
+	padding: 8px;
+	width: auto;
+	display: inline-block;
+	padding-right: 36px;	
+  text-shadow: 1px 1px #000000;
+}
+.crm_core_reports .item-list {
+}
+.crm_core_reports .item-list UL {
+  margin-bottom: 36px;
+}
+.crm_core_reports .item-list UL LI {
+  padding-left: 12px;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.crm_core_reports .item-list UL LI A {
+  margin-left: -12px;
+  font-style: normal;
+  font-size: 1.2em;
+  text-decoration: none;
+  color: #248bd1;
+}
+.crm_core_reports .item-list UL LI A:hover {
+	color: #5ccbf6;
+}
+.crm_core_reports .column_a {
+  margin-right: 16px;
+}
+
+/* basic report metrics */
+.results-summary {
+  background-color: #3c7489;
+  padding: 4px 8px;
+  display: inline-block;
+  color: White;
+  font-size: 0.9em;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;  
+}
+.detail-buttons {
+	float: right;
+}
+.view-filters {
+	margin-top: 8px;
+	margin-bottom: 8px;
+  -moz-border-radius: 32px;
+  -webkit-border-radius: 32px;
+  border-radius: 32px;
+}
+
+/* icons */
+.ao_contact_icon {
+	background: url(../images/ao-backend-icons.png) 0px -150px no-repeat;
+	height: 27px;
+	width: 27px;
+	margin: 0px auto;
+}
+.ao_contact_household {
+  background: url(../images/ao-backend-icons.png) -30px -150px no-repeat;
+}
+.ao_contact_organization {
+  background: url(../images/ao-backend-icons.png) -60px -150px no-repeat;
+}
+
+
+/* typography */
+H2 {
+	text-transform: uppercase;
+	padding: 8px 0px 8px 0px;
+	margin-bottom: 8px;
+	border-bottom: 1px solid #CCC;
+  color: #4b697a;
+}
+.ao_no_results {
+	width: 75%;
+	font-size: 2em;
+	text-align: center;
+	margin: 2em auto 4em;
+}
+
+.field-object {
+	font-weight: 700;
+	color: #555;
+}
+.field-object A:visited,
+.field-object A:link {
+	color: #0062a0;
+	text-decoration: none;
+}
+.field-object A:hover {
+	color: #5ccbf6;
+}
+
+/* grids */
+
+/* views captions */
+.views-table caption {
+	text-align: left;
+	font-size: 1.2em;
+  border: none;
+	-moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background: #85a3b3;
+  margin-bottom: 3px;
+  padding: 4px 12px;
+  color: white;
+  text-shadow: 1px 1px 3px #444;
+}
+
+/* views filters */
+.record-summary {
+	margin-bottom: 8px;
+}
+.views-exposed-form {
+  border: 1px solid #85a3b3;
+  margin-bottom: 3px;
+  background: rgba(250, 248, 240, .8), rgba(255, 255, 255, .5);
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  padding: 4px 12px;
+  
+  
+  background-color: whitesmoke;
+  background-image: -moz-linear-gradient(top,white,rgba(250, 248, 240, .8));
+  background-image: -webkit-gradient(linear,0 0,0 100%,from(white),to(rgba(250, 248, 240, .8)));
+  background-image: -webkit-linear-gradient(top,white,rgba(250, 248, 240, .8));
+  background-image: -o-linear-gradient(top,white,rgba(250, 248, 240, .8));
+  background-image: linear-gradient(to bottom,#ffffff,rgba(250, 248, 240, .8));
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF',endColorstr='#FFE6E6E6',GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05); 
+  border-top: 1px solid #85a3b3;
+  padding: 8px 0px 8px 8px;
+  
+  
+}
+.views-exposed-form .views-exposed-widget {
+  margin: 0px;
+  padding: 6px 0px 0px 8px;
+}
+.views-exposed-form .views-exposed-widget LABEL {
+	font-size: 0.8em;
+	font-weight: 700;
+	text-transform: uppercase;
+  color: #708c9b;
+}
+.views-exposed-form .views-reset-button,
+.views-exposed-form .views-submit-button {
+  border: none;
+}
+
+.view-crm-core-contacts .views-field-nothing-3 a {
+	padding-right: 0px;
+}
+
+/* vbo */
+.vbo-views-form TH.views-field-views-bulk-operations, .vbo-views-form TD.views-field-views-bulk-operations {
+	text-align: center;
+	border-right: 1px solid #CCC;
+	background-color: #f1f1ff;
+}
+.vbo-views-form FIELDSET#edit-select {
+	display: none;
+}
+
+

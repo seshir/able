@@ -1,0 +1,27 @@
+<?php
+/**
+ * @file
+ * Drupal needs this blank file.
+ */
+
+include_once 'ableorganizer_sample_petition_pages.features.inc';
+
+/**
+ * Implements hook_post_features_rebuild().
+ */
+function ableorganizer_sample_petition_pages_post_features_rebuild($component) {
+  // Configure the default email settings, if they are enabled.
+  if (isset($component) && $component == 'uuid_node' && variable_get('configure_petition_email', 0) === 1) {
+    $fields = array();
+    $fields['thanks_email'] = 'rules_cmcp_thank_you_message';
+    $fields['sign_email'] = 'rules_cmcp_target_email';
+    db_update('crm_core_petition_nodes')->fields($fields)->execute();
+  }
+}
+
+/**
+ * Implements hook_post_features_rebuild().
+ */
+function ableorganizer_sample_petition_pages_post_features_revert($component) {
+  ableorganizer_sample_petition_pages_post_features_rebuild($component);
+}

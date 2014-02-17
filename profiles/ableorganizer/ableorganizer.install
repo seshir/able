@@ -1,0 +1,1301 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the installation profile.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for this profile.
+ *
+ * @see system_install()
+ */
+function ableorganizer_install() {
+
+  $t = get_t();
+  // Add text formats.
+  $filtered_html_format = array(
+    'format' => 'filtered_html',
+    'name' => 'Filtered HTML',
+    'weight' => 0,
+    'filters' => array(
+      // URL filter.
+      'filter_url' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+      // HTML filter.
+      'filter_html' => array(
+        'weight' => 1,
+        'status' => 1,
+      ),
+      // Line break filter.
+      'filter_autop' => array(
+        'weight' => 2,
+        'status' => 1,
+      ),
+      // HTML corrector filter.
+      'filter_htmlcorrector' => array(
+        'weight' => 3,
+        'status' => 1,
+      ),
+      'media_filter' => array(
+        'weight' => 4,
+        'status' => 1,
+      ),
+      'pathologic' => array(
+        'weight' => 5,
+        'status' => 1,
+      ),
+    ),
+  );
+  $filtered_html_format = (object) $filtered_html_format;
+  filter_format_save($filtered_html_format);
+
+  $full_html_format = array(
+    'format' => 'full_html',
+    'name' => 'Full HTML',
+    'weight' => 1,
+    'filters' => array(
+      // URL filter.
+      'filter_url' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+      // Line break filter.
+      'filter_autop' => array(
+        'weight' => 1,
+        'status' => 1,
+      ),
+      // HTML corrector filter.
+      'filter_htmlcorrector' => array(
+        'weight' => 2,
+        'status' => 1,
+      ),
+      'media_filter' => array(
+        'weight' => 3,
+        'status' => 1,
+      ),
+      'pathologic' => array(
+        'weight' => 4,
+        'status' => 1,
+      ),
+    ),
+  );
+  $full_html_format = (object) $full_html_format;
+  filter_format_save($full_html_format);
+
+  // Insert default pre-defined node types into the database. For a complete
+  // list of available node type attributes, refer to the node type API
+  // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
+  $types = array(
+    array(
+      'type' => 'page',
+      'name' => $t('Basic page'),
+      'base' => 'node_content',
+      'description' => $t("Use <em>basic pages</em> for your static content, such as an 'About us' page."),
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    ),
+    array(
+      'type' => 'article',
+      'name' => $t('Article'),
+      'base' => 'node_content',
+      'description' => $t('Use <em>articles</em> for time-sensitive content like news, press releases or blog posts.'),
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    ),
+  );
+
+  foreach ($types as $type) {
+    $type = node_type_set_defaults($type);
+    node_type_save($type);
+    node_add_body_field($type);
+  }
+
+  // Insert default pre-defined RDF mapping into the database.
+  $rdf_mappings = array(
+    array(
+      'type' => 'node',
+      'bundle' => 'page',
+      'mapping' => array(
+        'rdftype' => array('foaf:Document'),
+      ),
+    ),
+    array(
+      'type' => 'node',
+      'bundle' => 'article',
+      'mapping' => array(
+        'field_image' => array(
+          'predicates' => array('og:image', 'rdfs:seeAlso'),
+          'type' => 'rel',
+        ),
+        'field_tags' => array(
+          'predicates' => array('dc:subject'),
+          'type' => 'rel',
+        ),
+      ),
+    ),
+  );
+  foreach ($rdf_mappings as $rdf_mapping) {
+    rdf_mapping_save($rdf_mapping);
+  }
+
+  // Default "Basic page" to not be promoted and have comments disabled.
+  variable_set('node_options_page', array('status'));
+  variable_set('comment_page', COMMENT_NODE_HIDDEN);
+
+  // Don't display date and author information for "Basic page" nodes.
+  variable_set('node_submitted_page', FALSE);
+
+  // Enable user picture support and set the default to a square thumbnail.
+  variable_set('user_pictures', '1');
+  variable_set('user_picture_dimensions', '1024x1024');
+  variable_set('user_picture_file_size', '800');
+  variable_set('user_picture_style', 'thumbnail');
+
+  // Allow visitor account creation with administrative approval.
+  variable_set('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);
+
+  // Create a default vocabulary named "Tags", enabled for the 'article'
+  // content type.
+  $description = $t('Use tags to group articles on similar topics into categories.');
+  $help = $t('Enter a comma-separated list of words to describe your content.');
+  $vocabulary = (object) array(
+    'name' => $t('Tags'),
+    'description' => $description,
+    'machine_name' => 'tags',
+    'help' => $help,
+
+  );
+  taxonomy_vocabulary_save($vocabulary);
+
+  $field = array(
+    'field_name' => 'field_' . $vocabulary->machine_name,
+    'type' => 'taxonomy_term_reference',
+    // Set cardinality to unlimited for tagging.
+    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    'settings' => array(
+      'allowed_values' => array(
+        array(
+          'vocabulary' => $vocabulary->machine_name,
+          'parent' => 0,
+        ),
+      ),
+    ),
+  );
+  field_create_field($field);
+
+  $instance = array(
+    'field_name' => 'field_' . $vocabulary->machine_name,
+    'entity_type' => 'node',
+    'label' => 'Tags',
+    'bundle' => 'article',
+    'description' => $vocabulary->help,
+    'widget' => array(
+      'type' => 'taxonomy_autocomplete',
+      'weight' => -4,
+    ),
+    'display' => array(
+      'default' => array(
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 10,
+      ),
+      'teaser' => array(
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 10,
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // Create an image field named "Image", enabled for the 'article'
+  // content type. Many of the following values will be defaulted, they're
+  // included here as an illustrative examples.
+  // See http://api.drupal.org/api/function/field_create_field/7
+  $field = array(
+    'field_name' => 'field_image',
+    'type' => 'image',
+    'cardinality' => 1,
+    'locked' => FALSE,
+    'indexes' => array('fid' => array('fid')),
+    'settings' => array(
+      'uri_scheme' => 'public',
+      'default_image' => FALSE,
+    ),
+    'storage' => array(
+      'type' => 'field_sql_storage',
+      'settings' => array(),
+    ),
+  );
+  field_create_field($field);
+
+  // Many of the following values will be defaulted, they're included here as
+  // an illustrative examples.
+  // See http://api.drupal.org/api/function/field_create_instance/7
+  $instance = array(
+    'field_name' => 'field_image',
+    'entity_type' => 'node',
+    'label' => 'Image',
+    'bundle' => 'article',
+    'description' => $t('Upload an image to go with this article.'),
+    'required' => FALSE,
+    'settings' => array(
+      'file_directory' => 'field/image',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'alt_field' => TRUE,
+      'title_field' => '',
+    ),
+    'widget' => array(
+      'type' => 'image_image',
+      'settings' => array(
+        'progress_indicator' => 'throbber',
+        'preview_image_style' => 'thumbnail',
+      ),
+      'weight' => -1,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'image',
+        'settings' => array('image_style' => 'large', 'image_link' => ''),
+        'weight' => -1,
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'type' => 'image',
+        'settings' => array(
+          'image_style' => 'medium',
+          'image_link' => 'content',
+        ),
+        'weight' => -1,
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // Enable default permissions for system roles.
+  $filtered_html_permission = filter_permission_name($filtered_html_format);
+  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array(
+    'access content',
+    'access comments',
+    $filtered_html_permission,
+  ));
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array(
+    'access content',
+    'access comments',
+    'post comments',
+    'skip comment approval',
+    $filtered_html_permission,
+  ));
+
+  // Create a default role for site administrators, with all available
+  // permissions assigned.
+  $admin_role = new stdClass();
+  $admin_role->name = 'administrator';
+  $admin_role->weight = 2;
+  user_role_save($admin_role);
+  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
+  // Set this as the administrator role.
+  variable_set('user_admin_role', $admin_role->rid);
+
+  // Assign user 1 the "administrator" role.
+  db_insert('users_roles')
+    ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
+    ->execute();
+
+  // Enable the admin theme.
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', 'seven')
+    ->execute();
+  variable_set('admin_theme', 'seven');
+  variable_set('node_admin_theme', '0');
+
+  // Enable the template theme for ableorganizer.
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', 'abletemplate')
+    ->execute();
+  variable_set('theme_default', 'abletemplate');
+
+  // Configure CRM Core Contact matching rules.
+  // Enable the default engine.
+  db_insert('crm_core_match_engines')
+    ->fields(array(
+      'machine_name' => 'default_matching_engine',
+      'weight' => 10,
+      'status' => 1,
+    ))
+    ->execute();
+
+  // Enable the default match engine for contacts of type "individual".
+  db_insert('crm_core_match_contact_types')
+    ->fields(array(
+      'contact_type' => 'individual',
+      'threshold' => 30,
+      'status' => 1,
+      'strict' => 0,
+      'return_order' => 'created',
+    ))
+    ->execute();
+
+  // Add contact name and email matching rules for individuals.
+  $contact_type_rules = array(
+    array(
+      'individual',
+      'contact_name',
+      'name',
+      'given',
+      'equals',
+      10,
+      1,
+      -25,
+    ),
+    array(
+      'individual',
+      'contact_name',
+      'name',
+      'family',
+      'equals',
+      20,
+      1,
+      -24,
+    ),
+    array(
+      'individual',
+      'field_ao_email_address',
+      'email',
+      'email',
+      'equals',
+      30,
+      1,
+      -23,
+    ),
+  );
+  $query = db_insert('crm_core_match_contact_type_rules')
+    ->fields(array(
+      'contact_type',
+      'field_name',
+      'field_type',
+      'field_item',
+      'operator',
+      'score',
+      'status',
+      'weight',
+    ));
+  foreach ($contact_type_rules as $contact_type_rule) {
+    $query->values($contact_type_rule);
+  }
+  $query->execute();
+
+  // Set CRM Core user sync defaults (authenticated users to individuals).
+  variable_set('crm_core_user_sync_rules', array(
+    0 => array(
+      'rid' => '2',
+      'contact_type' => 'individual',
+      'weight' => '0',
+      'enabled' => 1,
+    ),
+  ));
+
+  // Configure CRM Core primary fields.
+  $individual_contact_type = crm_core_contact_type_load('individual');
+  $individual_contact_type->primary_fields = array(
+    'email' => 'field_ao_email_address',
+    'address' => 'field_ao_home_address',
+    'phone' => 'field_ao_primary_telephone',
+  );
+  crm_core_contact_type_save($individual_contact_type);
+
+  // Setup mimemail format and off mimemail sitestyle.
+  variable_set('mimemail_format', 'full_html');
+  variable_set('mimemail_sitestyle', 0);
+
+  // Setting default theme for CRM Core.
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', 'ablestarter')
+    ->execute();
+  variable_set('crm_core_theme_enabled', 1);
+  variable_set('crm_core_theme', 'ablestarter');
+
+  // Now set CRM Core to use the CRM Core menu.
+  variable_set('crm_core_theme_replace_links', 1);
+
+  // Now turn on the dashboard.
+  variable_set('crm_core_dashboard_enabled', 1);
+  variable_set('crm_core_dashboard_path', 'crm-core/ableorganizer_dashboard');
+  $item = array(
+    'link_path' => 'crm-core/dashboard',
+    'link_title' => 'Dashboard',
+    'menu_name' => 'crm-core-menu',
+    'weight' => 0,
+  );
+  menu_link_save($item);
+
+  // Now set the default logo.
+  $theme_name = 'ablestarter';
+  $var_name = 'theme_' . $theme_name . '_settings';
+  $new_path = 'profiles/ableorganizer/images/ao-logo.png';
+
+  $settings = variable_get($var_name, array());
+  $settings['logo_path'] = $new_path;
+  variable_set($var_name, $settings);
+
+  // Now set the default user picture.
+  variable_set("user_pictures", 1);
+  variable_set("user_picture_default", "profiles/ableorganizer/images/user-pic-default.png");
+
+  // Compact forms settings.
+  variable_set('compact_forms_ids', "user-login-form
+crm-core-profile-entry-form-ao-annual-appeal-form
+crm-core-profile-entry-form-ao-fundraiser-form
+crm-core-profile-entry-form-ao-donation-form
+crm-core-profile-entry-form-ao-cmcev-simple-single-form
+crm-core-profile-entry-form-ao-cmcev-simple-quantity-form
+crm-core-profile-entry-form-ao-cmcev-simple-many-form
+crm-core-profile-entry-form-ao-cmcev-simple-reg-form
+crm-core-profile-entry-form-short-petition-with-message
+crm-core-profile-entry-form-canvass-signatures
+crm-core-profile-entry-form-short-online-petition
+crm-core-profile-entry-form-signature-drive
+crm-core-profile-entry-form-ao-volunteer-commitment-form-2
+crm-core-profile-entry-form-ao-volunteer-commitment-form");
+
+  variable_set("compact_forms_field_size", "");
+  variable_set("compact_forms_descriptions", 1);
+  variable_set("compact_forms_stars ", "2");
+
+  // Ensure submitted information is off for the major content types.
+  variable_set("node_submitted_cmcd_page", 0);
+  variable_set("node_submitted_cmcev_event", 0);
+  variable_set("node_submitted_cmcp_petition", 0);
+  variable_set("node_submitted_cmcv_volunteer", 0);
+  variable_set("node_submitted_page", 0);
+  variable_set("node_submitted_article", 0);
+
+  // Enable blocks.
+  // This must be done after the theme has been installed.
+  $default_theme = variable_get('theme_default', 'abletemplate');
+  $admin_theme = 'seven';
+  $blocks = array(
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'crm_core_profile',
+      'delta' => 'crm_core_profile_form_viewer',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 10,
+      'region' => 'sidebar_second',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'help',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => 'ablestarter',
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+  );
+  $query = db_insert('block')->fields(array(
+    'module',
+    'delta',
+    'theme',
+    'status',
+    'weight',
+    'region',
+    'pages',
+    'cache',
+  ));
+
+  foreach ($blocks as $block) {
+    $query->values($block);
+  }
+  $query->execute();
+
+  // We need this to clear node_load cache after importing sample content in
+  // order to prevent 'Notice: Undefined property: stdClass::$changed' msg.
+  variable_set('search_active_modules', array('ableorganizer', 'node', 'user'));
+}
+
+/**
+ * Implements hook_install_tasks_alter().
+ */
+function ableorganizer_install_tasks_alter(&$tasks, $install_state) {
+
+  $t = get_t();
+
+  // The "Welcome" screen needs to come after the first two steps
+  // (profile and language selection), despite the fact that they are disabled.
+  $new_task = array();
+  $new_task['ableorganizer_welcome'] = array(
+    'display' => TRUE,
+    'display_name' => $t('Welcome'),
+    'type' => 'form',
+    'run' => isset($install_state['parameters']['welcome']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
+  );
+  $tasks = $new_task + $tasks;
+
+  $new_tasks = array();
+
+  // Configure features.
+  $new_tasks['ableorganizer_features'] = array(
+    'display' => TRUE,
+    'display_name' => $t('Select features'),
+    'type' => 'form',
+    'run' => isset($install_state['parameters']['features']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
+  );
+
+  // Configure profile settings.
+  $new_tasks['ableorganizer_profile_settings'] = array(
+    'display' => TRUE,
+    'display_name' => $t('Messaging and currency settings'),
+    'type' => 'form',
+    'run' => isset($install_state['parameters']['profile_settings']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
+  );
+
+  // Select sample content.
+  $new_tasks['ableorganizer_sample_content'] = array(
+    'display' => TRUE,
+    'display_name' => $t('Sample content and data'),
+    'type' => 'form',
+    'run' => isset($install_state['parameters']['sample_content']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
+  );
+
+  // Select sample content.
+  $new_tasks['ableorganizer_install_sample_content'] = array(
+    'display' => TRUE,
+    'display_name' => $t('Install sample content and data'),
+    'type' => 'batch',
+    'run' => isset($install_state['parameters']['install_sample_content']) ? INSTALL_TASK_SKIP : INSTALL_TASK_RUN_IF_REACHED,
+  );
+
+  $tasks = array_slice($tasks, 0, 11) + $new_tasks + array_slice($tasks, 11);
+
+  // Change the name of the other install profile step.
+  $tasks['install_profile_modules']['display_name'] = $t('Install modules');
+}
+
+/**
+ * Task callback: shows the welcome screen.
+ */
+function ableorganizer_welcome($form, &$form_state, &$install_state) {
+
+  $t = get_t();
+  drupal_set_title($t('Welcome to AbleOrganizer'));
+
+  $message = $t('Thank you for using AbleOrganizer!') . '<br />';
+  $message .= '<p>' . $t('This Drupal distribution includes powerful features for tracking information about people, activities and relationships built with CRM Core.') . '</p>';
+  $message .= '<p>' . $t('The following features are included as part of this distro:') . '</p>';
+  $message .= '<ul>';
+  $message .= '<li>' . $t('Donations: donation pages, source tracking and reports.');
+  $message .= '<li>' . $t('Events: event registration, attendance and reports.');
+  $message .= '<li>' . $t('Petitions: signature gathering, targeted emails and reports.');
+  $message .= '<li>' . $t('Volunteer: volunteer management and reports.');
+  $message .= '</ul>';
+
+  $form = array();
+  $form['welcome_message'] = array(
+    '#markup' => $message,
+  );
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => $t("Get started!"),
+    '#weight' => 10,
+  );
+
+  return $form;
+}
+
+/**
+ * Install welcome submission handler.
+ */
+function ableorganizer_welcome_submit($form, &$form_state) {
+  global $install_state;
+
+  $install_state['parameters']['welcome'] = 'done';
+}
+
+/**
+ * Task callback.
+ *
+ * Select the features you are going to install with AbleOrganizer
+ */
+function ableorganizer_features($form, &$form_state, &$install_state) {
+  $t = get_t();
+
+  // This is the page where we select the features to be installed.
+  drupal_set_title($t('Select features'));
+
+  $form = array();
+
+  $form['basic_desc'] = array(
+    '#markup' => $t('<h2>AbleOrganizer features</h2>AbleOrganizer includes a variety of tools for interacting with your community. Select the ones that are right for your site.'),
+  );
+
+  $form['settings_wrapper'] = array(
+    '#type' => 'fieldset',
+    '#title' => $t('Features'),
+  );
+
+  $form['settings_wrapper']['desc'] = array(
+    '#markup' => $t('Select the tools you would like to install.'),
+  );
+
+  // Donations.
+  $form['settings_wrapper']['install_donations'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => TRUE,
+    '#title' => $t('Donations'),
+    '#description' => $t('Includes donation pages, source tracking, and reports.'),
+  );
+
+  // Events.
+  $form['settings_wrapper']['install_events'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => TRUE,
+    '#title' => $t('Events'),
+    '#description' => $t('Includes event registration, attendance and reports.'),
+  );
+
+  // Petitions.
+  $form['settings_wrapper']['install_petitions'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => TRUE,
+    '#title' => $t('Petitions'),
+    '#description' => $t('Includes signature gathering, targeted emails and reports.'),
+  );
+
+  // Volunteer.
+  $form['settings_wrapper']['install_volunteer'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => TRUE,
+    '#title' => $t('Volunteer'),
+    '#description' => $t('Includes volunteer management and reports.'),
+  );
+
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => $t('Continue'),
+    '#weight' => 15,
+  );
+
+  return $form;
+}
+
+/**
+ * Features submission handler.
+ */
+function ableorganizer_features_submit($form, &$form_state) {
+
+  global $install_state;
+
+  $modules = array();
+
+  // Default settings.
+  variable_set('donations_enabled', 0);
+  variable_set('events_enabled', 0);
+  variable_set('petitions_enabled', 0);
+  variable_set('volunteer_enabled', 0);
+
+  // This is where we turn on various features.
+  if (!empty($form_state['values']['install_donations'])) {
+    $modules[] = 'crm_core_donation';
+    variable_set('donations_enabled', 1);
+
+    // Set default colors for reports.
+    variable_set('crm_core_donation_background_color', 'rgba(148, 186, 101, 0.4)
+rgba(148, 186, 101, 0)');
+    variable_set('crm_core_donation_chart_color', 'rgba(255,255,255,1)');
+    variable_set('crm_core_donation_column_width', '0.8');
+    variable_set('crm_core_donation_display_labels', '0');
+    variable_set('crm_core_donation_height', '200');
+    variable_set('crm_core_donation_include_legend', '0');
+    variable_set('crm_core_donation_line_color', 'rgba(148, 186, 101, 1)');
+    variable_set('crm_core_donation_series_colors', 'rgba(49, 165, 189, 1)
+rgba(148, 186, 101, 1)
+rgba(207, 68, 68, 1)
+rgba(155, 89, 168, 1)
+rgba(49, 81, 189, 1)');
+    variable_set('crm_core_donation_xaxis_tickmarks', '7');
+  }
+
+  if (!empty($form_state['values']['install_events'])) {
+    $modules[] = 'crm_core_event';
+    variable_set('events_enabled', 1);
+
+    // Set defaults for reports.
+    variable_set('crm_core_event_background_color', 'rgba(49, 165, 189, 0.4)
+rgba(49, 165, 189, 0)');
+    variable_set('crm_core_event_chart_color', 'rgba(255,255,255,1)');
+    variable_set('crm_core_event_column_width', '0.8');
+    variable_set('crm_core_event_display_labels', '0');
+    variable_set('crm_core_event_height', '200');
+    variable_set('crm_core_event_include_legend', '0');
+    variable_set('crm_core_event_line_color', 'rgba(49, 165, 189, 1)');
+    variable_set('crm_core_event_series_colors', 'rgba(49, 165, 189, 1)
+rgba(207, 68, 68, 1)
+rgba(148, 186, 101, 1)
+rgba(155, 89, 168, 1)
+rgba(49, 81, 189, 1)');
+    variable_set('crm_core_event_xaxis_tickmarks', '7');
+  }
+
+  if (!empty($form_state['values']['install_petitions'])) {
+    $modules[] = 'crm_core_petition';
+    variable_set('petitions_enabled', 1);
+
+    // Report defaults.
+    variable_set('crm_core_petition_background_color', 'rgba(49, 81, 189, 0.4)
+rgba(49, 81, 189, 0)');
+    variable_set('crm_core_petition_chart_color', 'rgba(255,255,255,1)');
+    variable_set('crm_core_petition_column_width', '0.8');
+    variable_set('crm_core_petition_display_labels', '0');
+    variable_set('crm_core_petition_height', '200');
+    variable_set('crm_core_petition_include_legend', '0');
+    variable_set('crm_core_petition_line_color', 'rgba(49, 81, 189, 1)');
+    variable_set('crm_core_petition_series_colors', 'rgba(49, 81, 189, 1)
+rgba(49, 165, 189, 1)
+rgba(207, 68, 68, 1)
+rgba(148, 186, 101, 1)
+rgba(155, 89, 168, 1)');
+    variable_set('crm_core_petition_show_counter', '1');
+    variable_set('crm_core_petition_xaxis_tickmarks', '7');
+  }
+
+  if (!empty($form_state['values']['install_volunteer'])) {
+    $modules[] = 'crm_core_volunteer';
+    variable_set('volunteer_enabled', 1);
+
+    // Report defaults.
+    variable_set('crm_core_volunteer_background_color', 'rgba(207, 68, 68, 0.4)
+rgba(207, 68, 68, 0)');
+    variable_set('crm_core_volunteer_chart_color', 'rgba(255,255,255,1)');
+    variable_set('crm_core_volunteer_chart_height', '200');
+    variable_set('crm_core_volunteer_column_width', '0.8');
+    variable_set('crm_core_volunteer_display_labels', '0');
+    variable_set('crm_core_volunteer_include_legend', '0');
+    variable_set('crm_core_volunteer_line_color', 'rgba(207, 68, 68, 1)');
+    variable_set('crm_core_volunteer_series_colors', 'rgba(207, 68, 68, 1)
+rgba(49, 165, 189, 1)
+rgba(148, 186, 101, 1)
+rgba(155, 89, 168, 1)
+rgba(49, 81, 189, 1)');
+    variable_set('crm_core_volunteer_xaxis_tickmarks', '7');
+  }
+
+  module_enable($modules);
+
+  // Flush caches to initialize features.
+  features_flush_caches();
+
+  $install_state['parameters']['features'] = 'done';
+}
+
+/**
+ * Task callback.
+ *
+ * Profile settings.
+ */
+function ableorganizer_profile_settings($form, &$form_state, &$install_state) {
+  $t = get_t();
+
+  drupal_set_title($t('Configure profile settings'));
+  // Check to make sure we have at least one feature enabled.
+  if (variable_get('donations_enabled', 0) == 1 || variable_get('events_enabled', 0) == 1 || variable_get('petitions_enabled', 0) == 1 || variable_get('volunteer_enabled', 0) == 1) {
+
+    $form['basic_desc'] = array(
+      '#markup' => $t('<h2>AbleOrganizer messaging</h2>Most of the features in AbleOrganizer are configured to send HTML emails. Select the kinds of communications you would like your site to generate.'),
+    );
+
+    $form['settings_wrapper'] = array(
+      '#type' => 'fieldset',
+      '#title' => $t('Message settings'),
+    );
+    $form['settings_wrapper']['starter_message'] = array(
+      '#markup' => $t('Select message settings.'),
+    );
+  }
+
+  // This should house the email settings for each feature.
+  // Starting with donations.
+  if (variable_get('donations_enabled', 0) == 1) {
+    $form['settings_wrapper']['donation_emails'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Donations'),
+      '#description' => $t('Check this box to send thank you messages each time a donation is received.'),
+    );
+  }
+
+  // Next do events.
+  if (variable_get('events_enabled', 0) == 1) {
+    $form['settings_wrapper']['event_emails'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Events'),
+      '#description' => $t('Check this box to send thank you messages each time someone registers for an event.'),
+    );
+  }
+
+  if (variable_get('petitions_enabled', 0) == 1) {
+    $form['settings_wrapper']['petition_emails'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Petitions'),
+      '#description' => $t('Check this box to send thank you messages each time someone signs a petition, or when someone signs a targeted petition.'),
+    );
+  }
+
+  if (variable_get('volunteer_enabled', 0) == 1) {
+    $form['settings_wrapper']['volunteer_emails'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Volunteer'),
+      '#description' => $t('Check this box to send thank you messages each time someone registers for an event.'),
+    );
+  }
+
+  // Build a currency options list from all defined currencies.
+  $options = array();
+  foreach (commerce_currencies(FALSE, TRUE) as $currency_code => $currency) {
+    $options[$currency_code] = t('@code - !name', array(
+      '@code' => $currency['code'],
+      '@symbol' => $currency['symbol'],
+      '!name' => $currency['name'],
+    ));
+
+    if (!empty($currency['symbol'])) {
+      $options[$currency_code] .= ' - ' . check_plain($currency['symbol']);
+    }
+  }
+
+  $form['basic_desc_currency'] = array(
+    '#markup' => $t('<h2>Currency settings</h2>AbleOrganizer is fully internationalized and integrates directly with Drupal Commerce. Select the currency settings most appropriate for your site.'),
+  );
+
+  $form['commerce_default_currency_wrapper'] = array(
+    '#type' => 'fieldset',
+    '#title' => $t('Currency'),
+  );
+  $form['commerce_default_currency_wrapper']['commerce_default_currency'] = array(
+    '#type' => 'select',
+    '#title' => t('Default site currency'),
+    '#options' => $options,
+    '#default_value' => commerce_default_currency(),
+  );
+
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => $t('Continue'),
+    '#weight' => 15,
+  );
+
+  return $form;
+}
+
+/**
+ * Profile settings submission handler.
+ */
+function ableorganizer_profile_settings_submit($form, &$form_state) {
+
+  global $install_state;
+
+  // This is where we enable the default emails for each feature.
+  if (!empty($form_state['values']['donation_emails'])) {
+    variable_set('configure_donation_email', 1);
+  }
+  if (!empty($form_state['values']['event_emails'])) {
+    variable_set('configure_event_email', 1);
+  }
+  if (!empty($form_state['values']['petition_emails'])) {
+    variable_set('configure_petition_email', 1);
+  }
+  if (!empty($form_state['values']['volunteer_emails'])) {
+    variable_set('configure_volunteer_email', 1);
+  }
+
+  // This is where we set the default currency.
+  variable_set('commerce_default_currency', $form_state['values']['commerce_default_currency']);
+
+  $install_state['parameters']['profile_settings'] = 'done';
+}
+
+/**
+ * Task callback.
+ *
+ * Profile settings.
+ */
+function ableorganizer_sample_content($form, &$form_state, &$install_state) {
+  $t = get_t();
+
+  drupal_set_title($t('Sample Content and Data'));
+
+  $form = array();
+
+  // This is where we install the sample content.
+  // There should be sample content for each feature.
+  if (variable_get('donations_enabled', 0) == 1 || variable_get('events_enabled', 0) == 1 || variable_get('petitions_enabled', 0) == 1 || variable_get('volunteer_enabled', 0) == 1) {
+
+    $form['basic_desc_sample'] = array(
+      '#markup' => $t('<h2>Sample content and data</h2>You can install sample content, to use for demonstrations or as examples for your own site.'),
+    );
+
+    $form['sample_content_wrapper'] = array(
+      '#type' => 'fieldset',
+      '#title' => $t('Sample content'),
+    );
+
+    $form['sample_content_wrapper']['sample_content_message'] = array(
+      '#markup' => $t('Select the sample content to install:'),
+    );
+  }
+
+  $form['sample_content_wrapper']['ao_sample_content'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => TRUE,
+    '#title' => $t('AbleOrganizer Sample Content'),
+    '#description' => $t('Tutorials, documentation and explanations of how to work with the system.'),
+  );
+
+  if (variable_get('donations_enabled', 0) == 1) {
+    $form['sample_content_wrapper']['donation_sample_content'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Donations'),
+      '#description' => $t('Including online and offline donation forms.'),
+    );
+  }
+
+  // Next do events.
+  if (variable_get('events_enabled', 0) == 1) {
+    $form['sample_content_wrapper']['event_sample_content'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Events'),
+      '#description' => $t('Including event registration, registration levels and multiple ticket sales.'),
+    );
+  }
+
+  if (variable_get('petitions_enabled', 0) == 1) {
+    $form['sample_content_wrapper']['petition_sample_content'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Petitions'),
+      '#description' => $t('Including onilne petitions and signature drives.'),
+    );
+  }
+
+  if (variable_get('volunteer_enabled', 0) == 1) {
+    $form['sample_content_wrapper']['volunteer_sample_content'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Volunteer'),
+      '#description' => $t('Including sample volunteer opportunities.'),
+    );
+  }
+
+  if (variable_get('donations_enabled', 0) == 1 || variable_get('events_enabled', 0) == 1 || variable_get('petitions_enabled', 0) == 1 || variable_get('volunteer_enabled', 0) == 1) {
+    $form['sample_data_wrapper'] = array(
+      '#type' => 'fieldset',
+      '#title' => $t('Sample Data'),
+    );
+
+    $form['sample_data_wrapper']['sample_data_message'] = array(
+      '#markup' => $t('Select the sample data to install:'),
+    );
+  }
+
+  if (variable_get('donations_enabled', 0) == 1) {
+    $form['sample_data_wrapper']['donation_sample_data'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Donations received'),
+    );
+  }
+
+  // Next do events.
+  if (variable_get('events_enabled', 0) == 1) {
+    $form['sample_data_wrapper']['event_sample_data'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Events registrations'),
+    );
+  }
+
+  if (variable_get('petitions_enabled', 0) == 1) {
+    $form['sample_data_wrapper']['petition_sample_data'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Petition signatures'),
+    );
+  }
+
+  if (variable_get('volunteer_enabled', 0) == 1) {
+    $form['sample_data_wrapper']['volunteer_sample_data'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => TRUE,
+      '#title' => $t('Volunteer Commitments'),
+    );
+  }
+
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => $t('Continue'),
+    '#weight' => 15,
+  );
+
+  return $form;
+}
+
+/**
+ * Profile settings submission handler.
+ */
+function ableorganizer_sample_content_submit($form, &$form_state) {
+  global $install_state;
+
+  // Remember modules to be enabled.
+  $install_state['parameters']['ao_modules'] = array();
+  if (!empty($form_state['values']['ao_sample_content'])) {
+    $install_state['parameters']['ao_modules'][] = 'ableorganizer_sample_content';
+  }
+  if (!empty($form_state['values']['donation_sample_content'])) {
+    $install_state['parameters']['ao_modules'][] = 'ableorganizer_sample_donation_pages';
+  }
+  if (!empty($form_state['values']['event_sample_content'])) {
+    $install_state['parameters']['ao_modules'][] = 'ableorganizer_sample_event_pages';
+  }
+  if (!empty($form_state['values']['petition_sample_content'])) {
+    $install_state['parameters']['ao_modules'][] = 'ableorganizer_sample_petition_pages';
+  }
+  if (!empty($form_state['values']['volunteer_sample_content'])) {
+    $install_state['parameters']['ao_modules'][] = 'ableorganizer_sample_volunteer_pages';
+  }
+
+  // Remember types of data to be imported.
+  $install_state['parameters']['ao_data'] = array();
+  if (!empty($form_state['values']['donation_sample_data'])) {
+    $install_state['parameters']['ao_data'][] = 'donation';
+  }
+  if (!empty($form_state['values']['event_sample_data'])) {
+    $install_state['parameters']['ao_data'][] = 'event';
+  }
+  if (!empty($form_state['values']['petition_sample_data'])) {
+    $install_state['parameters']['ao_data'][] = 'petition';
+  }
+  if (!empty($form_state['values']['volunteer_sample_data'])) {
+    $install_state['parameters']['ao_data'][] = 'volunteer';
+  }
+
+  $install_state['parameters']['sample_content'] = 'done';
+}
+
+/**
+ * Installs sample content via a batch process.
+ *
+ * @param $install_state
+ *   An array of information about the current installation state.
+ *
+ * @return
+ *   The batch definition.
+ */
+function ableorganizer_install_sample_content(&$install_state) {
+  $files = system_rebuild_module_data();
+  $success = $results = $operations = array();
+
+  // Add selected sample content modules to install to the batch.
+  foreach ($install_state['parameters']['ao_modules'] as $module) {
+    $operations[] = array('_install_ableorganizer_module', array($module, $files[$module]->info['name']));
+  }
+
+  // Flush caches if any modules will be installed.
+  if (count($install_state['parameters']['ao_modules'])) {
+    $operations[] = array('_install_profile_modules_finished', array($success, $results, $operations));
+  }
+
+  // Add sample contacts to the batch if any data will be imported.
+  if (count($install_state['parameters']['ao_data'])) {
+    $operations[] = array('_install_ableorganizer_sample_contacts', array());
+  }
+
+  // Add sample activities to the batch for each type selected.
+  foreach ($install_state['parameters']['ao_data'] as $type) {
+    $operations[] = array('_install_ableorganizer_sample_data', array($type));
+  }
+
+  $batch = array(
+    'operations' => $operations,
+    'title' => st('Installing @drupal', array('@drupal' => drupal_install_profile_distribution_name())),
+    'error_message' => st('The installation has encountered an error.'),
+    'finished' => '_install_ableorganizer_sample_content_finished',
+  );
+  return $batch;
+}
+
+/**
+ * Batch callback for batch installation of modules.
+ */
+function _install_ableorganizer_module($module, $module_name, &$context) {
+  // Enable module and allow module dependencies to be satisfied.
+  module_enable(array($module));
+  $context['results'][] = $module;
+  $context['message'] = st('Installed %module module.', array('%module' => $module_name));
+}
+
+/**
+ * Create sample CRM Core contacts to support sample data.
+ */
+function _install_ableorganizer_sample_contacts(&$context) {
+  // Import sample contacts and activities.
+  module_load_include('inc', 'ableorganizer', 'ableorganizer_sample_data');
+
+  $sample_data = ableorganizer_sample_data();
+
+  // Create the sample contacts.
+  foreach ($sample_data['crm_core_contact'] as $contact) {
+    $new_contact = entity_import('crm_core_contact', $contact);
+    entity_save('crm_core_contact', $new_contact);
+  }
+}
+
+/**
+ * Create sample data callback for batch API.
+ */
+function _install_ableorganizer_sample_data($type, &$context) {
+  module_load_include('inc', 'ableorganizer', 'ableorganizer_sample_data');
+
+  // Create the callback function based on the type of data to be installed.
+  $callback = 'ableorganizer_' . $type . '_sample_data';
+  $sample_data = $callback();
+
+  foreach ($sample_data['crm_core_activity'] as $activity) {
+    $new_activity = entity_import('crm_core_activity', $activity);
+    $date = _ableorganizer_set_activity_date();
+    $new_activity->field_activity_date = $date;
+
+    // Set type specific date field values.
+    switch ($type) {
+      case 'donation':
+        $new_activity->field_cmcd_receive_date = $date;
+        break;
+
+      case 'event':
+        $new_activity->field_cmcev_reg_date = $date;
+        break;
+
+      case 'petition':
+        $new_activity->field_cmcp_received_date = $date;
+        break;
+
+      case 'volunteer':
+        $new_activity->field_cmcv_reg_date = $date;
+        break;
+    }
+
+    entity_save('crm_core_activity', $new_activity);
+  }
+}
+
+/**
+ * 'Finished' callback for module installation batch.
+ */
+function _install_ableorganizer_sample_content_finished($success, $results, $operations) {
+  // Set the frontpage if the sample content was installed.
+  $nid = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->condition('title', 'Welcome to AbleOrganizer')
+    ->condition('status', 1)
+    ->range(0, 1)
+    ->execute()
+    ->fetchField();
+  if (!empty($nid)) {
+    variable_set('site_frontpage', 'node/' . $nid);
+  }
+}
+
+/**
+ * Helper to set activity date.
+ *
+ * Will set activity date to some random point in time between now and -30 days.
+ */
+function _ableorganizer_set_activity_date() {
+  $days_from_now = 30;
+  $tz = variable_get('date_default_timezone', 'UTC');
+  $format = 'Y-m-d H:i:s';
+
+  $days = mt_rand(1, $days_from_now);
+  $ts = time() - $days * 24 * 60 * 60;
+  $date_str = format_date($ts, 'custom', $format, $tz);
+
+  $field = array(
+    LANGUAGE_NONE => array(
+      array(
+        'value' => $date_str,
+        'timezone' => $tz,
+        'timezone_db' => $tz,
+        'date_type' => 'datetime',
+      ),
+    ),
+  );
+
+  return $field;
+}

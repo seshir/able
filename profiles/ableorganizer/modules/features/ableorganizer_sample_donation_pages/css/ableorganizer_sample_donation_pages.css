@@ -1,0 +1,43 @@
+@CHARSET "UTF-8";
+/* documentation */
+.context-donate {
+}
+
+.context-donate #section-content #zone-above-content-1-wrapper {
+  background-color: #399B19;
+  color: White;
+}
+.context-donate #section-content #zone-above-content-1-wrapper .block .content H2 {
+  margin: 1em 0em;
+  font-size: 2.25em;
+  font-weight: normal;
+}
+
+.context-donate #section-content #zone-content-wrapper {
+  padding-top: 2em; 
+  padding-bottom: 1em;
+}
+.context-donate #region-sidebar-first .block {
+}
+.context-donate #region-sidebar-first .block .block-title {
+  font-size: 1.15em;
+}
+.context-donate #region-sidebar-first .block .content {
+  font-size: 0.9em;
+}
+.context-donate #region-sidebar-first .block .content UL {
+}
+.context-donate #region-sidebar-first .block .content LI {
+  list-style-image: none;
+  list-style-type: none;
+  margin: 0px 0px 1em;
+  padding: 0px;
+}
+.context-donate #region-sidebar-first .block .content LI A {
+  text-decoration: none;
+}
+
+  
+
+
+

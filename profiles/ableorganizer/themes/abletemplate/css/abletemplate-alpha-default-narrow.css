@@ -1,0 +1,40 @@
+/* This file will hold styles that are loaded using the same media query as the narrow grid. */
+/* If you are using the default media queries provided by Omega, these styles will also
+ *  apply to the normal and widescreen layouts. You may override these styles in the normal 
+ *  and widescreen CSS files as appropriate. */
+.ao-marq .ao-marq-item {
+  width: 48%;
+}
+.content-items {
+}
+.content-holder {
+  margin-right: 0em;
+  overflow: hidden;
+  background-color: #e1e1e1;
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+}
+.content-holder:first-child {
+  border-radius: 0em 0em 0px 10px;
+  -moz-border-radius: 0em 0em 0px 10px;
+  -webkit-border-radius: 0em 0em 0px 10px;
+}
+.content-holder:last-child {
+  border-radius: 0em 0em 10px 0px;
+  -moz-border-radius: 0em 0em 10px 0px;
+  -webkit-border-radius: 0em 0em 10px 0px;
+}
+.content-holder UL {
+  margin: 0em .5em .5em .5em;
+  padding: .5em;
+}
+.content-holder-layout {
+  width: 100%;
+  display: table;
+}
+.content-holder-layout .content-holder-row {
+  display: table-row;
+}
+.content-holder-layout .content-holder-row .content-holder {
+  display: table-cell;
+}

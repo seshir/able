@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * Code for the Able Organizer Dashboard feature.
+ */
+
+include_once 'ableorganizer_dashboard.features.inc';
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function ableorganizer_dashboard_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools' && $plugin_type == 'content_types') {
+    return 'plugins/' . $plugin_type;
+  }
+
+  return NULL;
+}

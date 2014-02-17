@@ -1,0 +1,131 @@
+name = AbleOrganizer installation profile
+description = Built on top of CRM Core to provide quick start and real working examples of how to use CRM Core to build CRM solution that feet your needs.
+core = 7.x
+distribution_name = AbleOrganizer
+project = ableorganizer
+exclusive = TRUE
+
+; Core modules.
+dependencies[] = block
+dependencies[] = comment
+dependencies[] = dblog
+dependencies[] = field
+dependencies[] = field_sql_storage
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = filter
+dependencies[] = help
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = node
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = rdf
+dependencies[] = search
+dependencies[] = system
+dependencies[] = taxonomy
+dependencies[] = text
+dependencies[] = user
+
+; crm core prerequisites
+dependencies[] = entityreference
+dependencies[] = entity
+dependencies[] = relation
+dependencies[] = views
+dependencies[] = views_ui
+dependencies[] = views_data_export
+dependencies[] = views_content
+dependencies[] = views_bulk_operations
+dependencies[] = ctools
+dependencies[] = panels
+dependencies[] = page_manager
+dependencies[] = token
+dependencies[] = rules
+dependencies[] = rules_admin
+
+; field modules
+dependencies[] = name
+dependencies[] = field_group
+dependencies[] = cck_phone
+dependencies[] = link
+dependencies[] = email
+dependencies[] = addressfield
+dependencies[] = date
+
+; helper modules
+dependencies[] = boxes
+dependencies[] = calendar
+dependencies[] = flot
+dependencies[] = mimemail
+dependencies[] = mailsystem
+dependencies[] = admin_menu
+dependencies[] = features
+dependencies[] = context
+dependencies[] = strongarm
+dependencies[] = pathologic
+dependencies[] = fontyourface
+dependencies[] = fontyourface_ui
+dependencies[] = google_fonts_api
+dependencies[] = compact_forms
+
+; commerce modules
+dependencies[] = commerce
+dependencies[] = commerce_ui
+dependencies[] = commerce_payment
+dependencies[] = commerce_payment_example
+dependencies[] = commerce_payment_ui
+dependencies[] = commerce_line_item
+dependencies[] = commerce_line_item_ui
+dependencies[] = commerce_price
+dependencies[] = commerce_product_pricing_ui
+dependencies[] = commerce_checkout
+dependencies[] = commerce_customer_ui
+dependencies[] = commerce_order_reference
+dependencies[] = commerce_authnet
+dependencies[] = commerce_paypal
+dependencies[] = commerce_product_ui
+dependencies[] = commerce_custom_product
+dependencies[] = commerce_features
+dependencies[] = commerce_product_pricing
+dependencies[] = commerce_cart
+
+; crm core modules
+dependencies[] = crm_core 
+dependencies[] = crm_core_ui 
+dependencies[] = crm_core_contact 
+dependencies[] = crm_core_contact_ui 
+dependencies[] = crm_core_activity
+dependencies[] = crm_core_activity_ui
+dependencies[] = crm_core_relationship
+dependencies[] = crm_core_relationship_ui
+dependencies[] = crm_core_user_sync
+dependencies[] = crm_core_report
+dependencies[] = crm_core_match
+dependencies[] = crm_core_default_matching_engine
+dependencies[] = crm_core_profile
+dependencies[] = crm_core_profile_commerce_items
+dependencies[] = crm_core_demo_standard_fields
+
+; AbleOrganizer customizations
+dependencies[] = ao
+dependencies[] = ableorganizer_dashboard
+
+; System Requirements.
+php_memory_limit = 128M
+
+
+; Information added by drush on 2013-10-15
+version = "7.x-1.0-beta6+79-dev"
+core = "7.x"
+project = "ableorganizer"
+datestamp = "1381844536"
+
+
+; Information added by Drupal.org packaging script on 2013-12-13
+version = "7.x-1.0-beta1"
+core = "7.x"
+project = "ableorganizer"
+datestamp = "1386959678"
+
